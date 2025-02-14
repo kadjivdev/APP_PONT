@@ -26,7 +26,8 @@ class FactureClientController extends Controller
 
             // Chargement des factures avec les relations nécessaires
             $factures = FactureClient::with(['client'])
-                ->where("type_facture", "normaliser")
+                ->where("type_facture", "NORMALISE")
+                ->whereNotNull("date_validation")
                 ->select([
                     'id',
                     'numero',

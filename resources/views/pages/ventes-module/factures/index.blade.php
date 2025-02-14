@@ -25,31 +25,59 @@
                         <table id="example1" class=" table table-bordered border-warning  table-hover table-striped table-sm">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>N°</th>
-                                    <th>Référence</th>
-                                    <th>Client</th>
-                                    <th>Réduction</th>
-                                    <th>Montant</th>
-                                    <th>Montant Soldé</th>
-                                    <th>Statut</th>
-                                    <th>Type</th>
+                                    <th class="border-bottom-0 text-nowrap py-3">N° Facture</th>
+                                    <th class="border-bottom-0 text-nowrap py-3">Date Insertion</th>
+                                    <th class="border-bottom-0">Date facture</th>
+                                    <th class="border-bottom-0">Client</th>
+                                    <th class="border-bottom-0">Échéance</th>
+                                    <th class="border-bottom-0 text-end">Montant HT</th>
+                                    <th class="border-bottom-0 text-end">Montant TTC</th>
+                                    <th class="border-bottom-0 text-end">Reste à payer</th>
+                                    <th class="border-bottom-0 text-center">Statut</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($factures as $item)
-                                <tr style="background-color: red;">
-                                    <td>{{ $loop->index + 1}} </td>
-                                    <td>{{ $item->date_facture->locale('fr_FR')->isoFormat('ll') }}</td>
-                                    <td>{{ $item->num_facture }}</td>
-                                    <td>{{ $item->client_facture }}</td>
-                                    <td>{{ $item->taux_remise }} %</td>
-                                    <td>{{ number_format($item->montant_total, 0, ',', ' ') }}</td>
-                                    <td>{{ number_format($item->montant_regle, 0, ',', ' ') }}</td>
-                                    <td>
-                                        <span class="badge rounded-pill text-bg-warning">{{ $item->statut }}</span>
+                                @foreach ($factures as $facture)
+                                <tr>
+                                    <td class="text-nowrap py-3">
+                                        <div class="d-flex align-items-center">
+                                            <span class="numero-facture me-2">{{ $facture->numero }}</span>
+                                            @if ($facture->is_proforma)
+                                            <span class="badge bg-info bg-opacity-10 text-info">Proforma</span>
+                                            @endif
+                                        </div>
                                     </td>
+                                    <td>{{ Carbon\Carbon::parse($facture->created_at)->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ $facture->date_facture->format('d/m/Y') }}</td>
                                     <td>
-                                        <span class="badge bg-success">{{$item->type}}</span>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-client me-2">
+                                                {{ substr($facture->client->raison_sociale, 0, 2) }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-medium">{{ $facture->client->raison_sociale }}</div>
+                                                <div class="text-muted small">{{ $facture->client->telephone }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $facture->date_echeance->format('d/m/Y') }}</td>
+                                    <td class="text-end fw-medium">
+                                        {{ number_format($facture->montant_ht, 0, ',', ' ') }} F
+                                    </td>
+                                    <td class="text-end fw-medium">
+                                        {{ number_format($facture->montant_ttc, 0, ',', ' ') }} F
+                                    </td>
+                                    <td class="text-end">
+                                        @if ($facture->reste_a_payer > 0)
+                                        <span class="text-danger fw-medium">
+                                            {{ number_format($facture->reste_a_payer, 0, ',', ' ') }} F
+                                        </span>
+                                        @else
+                                        <span class="badge bg-success bg-opacity-10 text-success">Soldée</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success"> {{$facture->type_facture}} </span>
                                     </td>
                                 </tr>
                                 @endforeach
