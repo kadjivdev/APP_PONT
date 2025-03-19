@@ -47,6 +47,7 @@ class FactureClientController extends Controller
                 ->orderBy('date_facture', 'desc')
                 ->get();
 
+            // dd($factures);
             // Ajouter des attributs calculés pour chaque facture
             $factures_transformed = $factures->transform(function ($facture) {
                 // Calcul du reste à payer
