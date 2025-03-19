@@ -2,7 +2,7 @@
 @section('content')
 <main id="main" class="main">
 
-    <div class="pagetitle d-flex">
+    <!-- <div class="pagetitle d-flex">
         <div class="col-6">
             <h1 class="float-left">Factures devis</h1>
         </div>
@@ -13,7 +13,7 @@
             </div>
             @endcan
         </div>
-    </div><!-- End Page +++ -->
+    </div>End Page +++ -->
 
     <section class="section">
         <div class="row">
